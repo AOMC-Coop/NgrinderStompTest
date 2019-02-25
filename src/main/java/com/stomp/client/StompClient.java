@@ -113,17 +113,17 @@ public class StompClient {
 		this.stompSession.disconnect();
 	}
 
-	public static void main(String[] args) throws Exception {
-		StompClient helloClient = new StompClient();
-		helloClient.connect("http://localhost:8083/socketconnect");
-
-		// logger.info("Subscribing to greeting topic using session " +
-		// stompSession);
-		// helloClient.subscribeGreetings(stompSession);
-
-		// logger.info("Sending hello message" + stompSession);
-		helloClient.sendMsg("msh", "156");
-		helloClient.disconnect();
-	}
+//	public static void main(String[] args) throws Exception {
+//		StompClient helloClient = new StompClient();
+//		helloClient.connect("http://localhost:8083/socketconnect");
+//
+//		// logger.info("Subscribing to greeting topic using session " +
+//		// stompSession);
+//		// helloClient.subscribeGreetings(stompSession);
+//
+//		// logger.info("Sending hello message" + stompSession);
+//		helloClient.sendMsg("msh", "156");
+//		helloClient.disconnect();
+//	}
 
 }
