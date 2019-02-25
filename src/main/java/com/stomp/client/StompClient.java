@@ -1,6 +1,7 @@
 package com.stomp.client;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,10 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import org.springframework.web.socket.sockjs.frame.Jackson2SockJsMessageCodec;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stomp.model.Message;
 
 /**
  * Created by nick on 30/09/2015.
@@ -57,9 +62,44 @@ public class StompClient {
 		});
 	}
 
-	public int sendMsg(String msg, String chatroom_idx) {
-		String sendMsg = "{" + "\"sender\":1,\"msg\":\"" + msg + "\",\"msg_type\":\"m\"}";
-		this.stompSession.send("/chatroom/" + chatroom_idx, sendMsg.getBytes());
+	public int sendMsg(String msg, String chatroom_idx) throws JsonProcessingException {
+//		String sendMsg = "{" + "\"sender\":1,\"msg\":\"" + msg + "\",\"msg_type\":\"m\"}";
+//		this.stompSession.send("/chatroom/" + chatroom_idx, sendMsg.getBytes());
+		
+		Message message = new Message();
+		message.setContent("yunjae-message");
+		message.setChannel_idx(1202);
+		message.setUser_idx(23);
+		message.setNickname("yunyun");
+		
+//		var send_date = now.format("dddd, MMMM Do").toString();
+//		var send_time = now.format("LT").toString();
+//		var send_db_date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+		
+		Date send_date = new Date();
+		SimpleDateFormat transFormat = new SimpleDateFormat("dddd, MMMM D");
+		String str_send_date = transFormat.format(send_date);
+
+		message.setSend_date(str_send_date);
+		
+		Date send_db_date = new Date();
+		SimpleDateFormat transFormat2 = new SimpleDateFormat("L");
+		String str_send_db_date = transFormat2.format(send_db_date);
+		message.setSend_db_date(str_send_db_date);
+		
+		
+		Date send_time = new Date();
+		SimpleDateFormat transFormat3 = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+		String str_send_time = transFormat3.format(send_time);
+		message.setSend_time(str_send_time);
+		
+		ObjectMapper mapper = new ObjectMapper();
+
+		//Object to JSON in String
+		String str_message = mapper.writeValueAsString(message);
+		
+		this.stompSession.send("/app/chat", str_message.getBytes());
+		
 		return 1;
 	}
 
@@ -75,7 +115,7 @@ public class StompClient {
 
 	public static void main(String[] args) throws Exception {
 		StompClient helloClient = new StompClient();
-		helloClient.connect("http://192.168.0.6:8080/gs-guide-websocket");
+		helloClient.connect("http://localhost:8083/socketconnect");
 
 		// logger.info("Subscribing to greeting topic using session " +
 		// stompSession);
