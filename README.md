@@ -14,6 +14,7 @@ from ch.qos.logback.classic import Logger
 from HTTPClient import NVPair
 from org.json import JSONObject, JSONArray
 from com.stomp.client import StompClient
+from com.stomp.model import Message
 
 test0 = Test(0, "conn")
 class TestRunner:
@@ -33,7 +34,7 @@ class TestRunner:
 
 	def conn(self):
 		self.client = StompClient()
-		return self.client.connect("http://192.168.0.6:8080/gs-guide-websocket")
+		return self.client.connect("http://127.0.0.1:8083/socketconnect")
 
 test0.record(TestRunner.conn)
 ```
